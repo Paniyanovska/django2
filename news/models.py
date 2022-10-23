@@ -2,10 +2,12 @@ from django.db import models
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
+    name = models.CharField(max_length=255, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True)
     in_menu = models.BooleanField(default=True)
     order = models.IntegerField(default=1)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
@@ -19,19 +21,23 @@ class Author(models.Model):
     avatar = models.ImageField(upload_to='avatars')
     bio = models.CharField(max_length=255)
 
+    objects = models.Manager()
+
     def __str__(self):
         return self.name
 
 
 class Article(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     content = models.TextField()
     short_description = models.TextField()
     main_image = models.ImageField(upload_to='images')
     pub_date = models.DateTimeField(auto_now_add=True)
     categories = models.ManyToManyField(Category)
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.name
@@ -49,7 +55,7 @@ class Comment(models.Model):
 
 
 class Newsletter(models.Model):
-    email = models.EmailField()
+    email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     subscribe_date = models.DateTimeField(auto_now_add=True)
     unscribe_date = models.DateTimeField(null=True, blank=True)
@@ -60,7 +66,7 @@ class Newsletter(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True)
     articles = models.ManyToManyField(Article)
 
     def __str__(self):

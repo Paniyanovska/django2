@@ -15,7 +15,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
-from polls.views import index, detail
 from news import views
 
 from django.conf import settings
@@ -23,9 +22,7 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('', index),
-    path('polls/<int:question_id>/', detail),
-    path('index/', views.index_hendler),
+    path('', views.index_hendler),
     path('single/', views.single_hendler),
     path('contact/', views.contact_hendler),
     path('category/', views.category_hendler),
