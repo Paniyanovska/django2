@@ -88,7 +88,7 @@ def get_fresh_urls():
 
 
 def run():
-    Article.objects.all().delete()
+    #Article.objects.all().delete()
     fresh_news = get_fresh_urls()
     with ThreadPoolExecutor(max_workers=10) as executor:
         executor.map(crawl_one, fresh_news)
