@@ -1,29 +1,8 @@
 from django.contrib import admin
 from django_summernote.admin import SummernoteModelAdmin
 from django.utils.html import format_html
-from threading import Thread
-from news.crawlers import bbc_crawler
+from .actions import count_words, get_fresh_news
 from .models import Article, Author, Category, Newsletter, Comment, Tag
-
-
-def count_words(modeladmin, request, queryset):
-    for object in queryset:
-        text = object.content.replace('<p>', '').replace('</p>', '')
-        words = text.split()
-        object.content_words_count = len(words)
-        object.save()
-
-
-count_words.short_description = "Count words in article"
-
-
-def get_fresh_news(modeladmin, request, queryset):
-    for object in queryset:
-        if object.name == 'BBC News':
-            Thread(target=bbc_crawler.run, args=()).start()
-
-
-get_fresh_news.short_description = "Get fresh articles"
 
 
 class ArticleAdmin(SummernoteModelAdmin):

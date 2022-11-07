@@ -20,7 +20,7 @@ class Category(models.Model):
 class Author(models.Model):
     name = models.CharField(max_length=255)
     avatar = models.ImageField(upload_to='avatars')
-    bio = models.CharField(max_length=255)
+    bio = models.CharField(max_length=255, null=True, blank=True)
 
     objects = models.Manager()
 
