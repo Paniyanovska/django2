@@ -1,5 +1,6 @@
 from requests_html import HTMLSession
 from slugify import slugify
+from PIL import Image
 from concurrent.futures import ThreadPoolExecutor
 from news.models import Article, Author, Category
 
@@ -48,6 +49,33 @@ def crawl_one(url):
             response = session.get(image_url)
             f.write(response.content)
 
+    img_crop_path = f'images/crop-{image_name}.jpg'
+
+    try:
+        im = Image.open(f'media/{img_path}')
+    except(Exception,) as e:
+        print(e)
+
+    if im.mode == "JPEG":
+        print('Тип изображения проверили')
+        pass
+    elif im.mode in ["RGBA", "P"]:
+        im = im.convert("RGB")
+    thumb_width = 110
+
+    def crop_center(pil_img, crop_width, crop_height):
+        img_width, img_height = pil_img.size
+        return pil_img.crop(((img_width - crop_width) // 2,
+                             (img_height - crop_height) // 2,
+                             (img_width + crop_width) // 2,
+                             (img_height + crop_height) // 2))
+
+    def crop_max_square(pil_img):
+        return crop_center(pil_img, min(pil_img.size), min(pil_img.size))
+
+    im_thumb = crop_max_square(im).resize((thumb_width, thumb_width), Image.Resampling.LANCZOS)
+    im_thumb.save(f'media/{img_crop_path}', quality=99)
+
     categories = []
     for cat in cats:
         categories.append(
@@ -63,6 +91,7 @@ def crawl_one(url):
         'content': my_content,
         'short_description': short_description.strip(),
         'main_image': img_path,
+        'main_image_crop': img_crop_path,
         'pub_date': pub_date,
         'author': author
     }

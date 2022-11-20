@@ -23,7 +23,6 @@
                             {% endfor %}
                         </div>
                     </div>
-                    <a href="{% url 'article' 'asd-asd' %}" class="nav-item nav-link">Article</a>
                     <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
                 </div>
                 <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
@@ -37,12 +36,11 @@
         </nav>
     </div>
 <!-- Navbar End -->
-
 <!-- Main News Slider Start -->
 <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-7 px-0">
-                <div class="owl-carousel main-carousel position-relative">
+    <div class="row">
+        <div class="col-lg-7 px-0">
+            <div class="owl-carousel main-carousel position-relative">
                     {% for article in first_slider_articles %}
                     <div class="position-relative overflow-hidden" style="height: 500px;">
                         <img class="img-fluid h-100" src="{{ article.main_image.url }}"
@@ -50,7 +48,7 @@
                         <div class="overlay">
                             <div class="mb-2">
                                 <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                    href="{% url 'article' article.slug %}">{{ article.categories.all.0 }}</a>
+                                    href="{% url 'category' article.categories.all.0.slug %}">{{ article.categories.all.0 }}</a>
                                 <a class="text-white" href="{% url 'article' article.slug %}">{{ article.pub_date }}</a>
                             </div>
                             <a class="h2 m-0 text-white text-uppercase font-weight-bold"
@@ -59,53 +57,46 @@
                     </div>
                     {% endfor %}
                 </div>
-            </div>
-            <div class="col-lg-5 px-0">
-                <div class="row mx-0">
-                    {% for article in side_slider_articles %}
-                    <div class="col-md-6 px-0">
-                        <div class="position-relative overflow-hidden" style="height: 250px;">
-                            <img class="img-fluid w-100 h-100" src="{{ article.main_image.url }}" style="object-fit: cover;">
-                            <div class="overlay">
-                                <div class="mb-2">
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                        href="">{{ article.categories.all.0 }}</a>
-                                    <a class="text-white" href="{% url 'article' article.slug %}">
-                                        <small>{{ article.pub_date | truncatechars:12 }}</small></a>
-                                </div>
-                                <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold"
-                                   href="{% url 'article' article.slug %}">{{ article.name | truncatewords:9 }}</a>
+        </div>
+        <div class="col-lg-5 px-0">
+            <div class="row mx-0">
+                {% for article in side_slider_articles %}
+                <div class="col-md-6 px-0">
+                    <div class="position-relative overflow-hidden" style="height: 250px;">
+                        <img class="img-fluid w-100 h-100" src="{{ article.main_image.url }}" style="object-fit: cover;">
+                        <div class="overlay">
+                            <div class="mb-2">
+                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                   href="{% url 'category' article.categories.all.0.slug %}"
+                                >{{ article.categories.all.0 }}</a>
+                                <a class="text-white" href="{% url 'article' article.slug %}">
+                                    <small>{{ article.pub_date | truncatechars:12 }}</small></a>
                             </div>
+                            <a class="h6 m-0 text-white text-uppercase font-weight-semi-bold"
+                               href="{% url 'article' article.slug %}">{{ article.name | truncatewords:9 }}</a>
                         </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
 <!-- Main News Slider End -->
-
 <!-- Breaking News Start -->
 <div class="container-fluid bg-dark py-3 mb-3">
-        <div class="container">
-            <div class="row align-items-center bg-dark">
-                <div class="col-12">
-                    <div class="d-flex justify-content-between">
-                        <div class="bg-primary text-dark text-center font-weight-medium py-2" style="width: 170px;">Breaking News</div>
-                        <div class="owl-carousel tranding-carousel position-relative d-inline-flex align-items-center ml-3"
-                            style="width: calc(100% - 170px); padding-right: 90px;">
-                            <div class="text-truncate"><a class="text-white text-uppercase font-weight-semi-bold" href=""
-                            >Текст первый</a></div>
-                            <div class="text-truncate"><a class="text-white text-uppercase font-weight-semi-bold" href=""
-                            >Текст второй</a></div>
-                        </div>
-                    </div>
+    <div class="container">
+        <div class="row align-items-center bg-dark">
+            <div class="col-12">
+                <div class="d-flex justify-content-between">
+                    <div class="bg-primary text-dark text-center font-weight-medium py-2"
+                         style="width: 170px;">Breaking News</div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <!-- Breaking News End -->
-
 <!-- News With Sidebar Start -->
 <div class="container-fluid">
     <div class="container">
@@ -125,7 +116,8 @@
                             <div class="bg-white border border-top-0 p-4">
                                 <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                            href="">{{ article.categories.all.0 }}</a>
+                                            href="{% url 'category' article.categories.all.0.slug %}"
+                                        >{{ article.categories.all.0 }}</a>
                                         <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                     </div>
                                     <a class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
@@ -139,7 +131,7 @@
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <small class="ml-3"><i class="far fa-eye mr-2"></i>12345</small>
-                                        <small class="ml-3"><i class="far fa-comment mr-2"></i>123</small>
+                                        <small class="ml-3"><i class="far fa-comment mr-2"></i>{{ article.comments.all.count }}</small>
                                     </div>
                             </div>
                         </div>
@@ -152,7 +144,8 @@
                                 <div class="bg-white border border-top-0 p-4">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                            href="">{{ article.categories.all.0 }}</a>
+                                            href="{% url 'category' article.categories.all.0.slug %}"
+                                        >{{ article.categories.all.0 }}</a>
                                         <a class="text-body" href="">
                                             <small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                     </div>
@@ -167,7 +160,7 @@
                                     </div>
                                     <div class="d-flex align-items-center">
                                         <small class="ml-3"><i class="far fa-eye mr-2"></i>12345</small>
-                                        <small class="ml-3"><i class="far fa-comment mr-2"></i>123</small>
+                                        <small class="ml-3"><i class="far fa-comment mr-2"></i>{{ article.comments.all.count }}</small>
                                     </div>
                                 </div>
                         </div>
@@ -176,11 +169,12 @@
                     {% for article in first_2_small_article %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="/static/img/news-110x110-1.jpg" alt="">
+                            <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
-                                           href="">{{ article.categories.all.0 }}</a>
+                                           href="{% url 'category' article.categories.all.0.slug %}"
+                                        >{{ article.categories.all.0 }}</a>
                                         <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                     </div>
                                     <a class="h6 m-0 text-secondary text-uppercase font-weight-bold"
@@ -192,11 +186,12 @@
                     {% for article in last_2_small_article %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="/static/img/news-110x110-3.jpg" alt="">
+                            <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
                                 <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                     <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
-                                           href="">{{ article.categories.all.0 }}</a>
+                                           href="{% url 'category' article.categories.all.0.slug %}"
+                                        >{{ article.categories.all.0 }}</a>
                                         <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                     </div>
                                     <a class="h6 m-0 text-secondary text-uppercase font-weight-bold"
@@ -216,7 +211,8 @@
                                 <div class="mt-auto p-4">
                                     <div class="mb-2">
                                             <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
-                                                href="">{{ article.categories.all.0 }}</a>
+                                                href="{% url 'category' article.categories.all.0.slug %}"
+                                            >{{ article.categories.all.0 }}</a>
                                             <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                         </div>
                                     <a class="h4 d-block mb-3 text-secondary text-uppercase font-weight-bold"
@@ -231,7 +227,7 @@
                                         </div>
                                         <div class="d-flex align-items-center">
                                             <small class="ml-3"><i class="far fa-eye mr-2"></i>12345</small>
-                                            <small class="ml-3"><i class="far fa-comment mr-2"></i>123</small>
+                                            <small class="ml-3"><i class="far fa-comment mr-2"></i>{{ article.comments.all.count }}</small>
                                         </div>
                                     </div>
                             </div>
@@ -241,11 +237,12 @@
                     {% for article in lower_first_2_article %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="/static/img/news-110x110-1.jpg" alt="">
+                            <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
                             <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                 <div class="mb-2">
                                         <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
-                                           href="">{{ article.categories.all.0 }}</a>
+                                           href="{% url 'category' article.categories.all.0.slug %}"
+                                        >{{ article.categories.all.0 }}</a>
                                         <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                     </div>
                                 <a class="h6 m-0 text-secondary text-uppercase font-weight-bold"
@@ -257,10 +254,12 @@
                     {% for article in lower_last_2_article %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="/static/img/news-110x110-3.jpg" alt="">
+                            <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
                             <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
                                 <div class="mb-2">
-                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">{{ article.categories.all.0 }}</a>
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                                           href="{% url 'category' article.categories.all.0.slug %}"
+                                        >{{ article.categories.all.0 }}</a>
                                         <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
                                     </div>
                                 <a class="h6 m-0 text-secondary text-uppercase font-weight-bold"
@@ -317,29 +316,7 @@
                 </div>
                 <!-- Ads End -->
 
-                <!-- Popular News Start -->
-                <div class="mb-3">
-                    <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Tranding News</h4>
-                    </div>
-                    <div class="bg-white border border-top-0 p-3">
-                        {% for article in trading_news %}
-                        <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
-                            <img class="img-fluid" src="/static/img/news-110x110-1.jpg" alt="">
-                            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
-                                <div class="mb-2">
-                                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
-                                       href="">{{ article.categories.all.0 | truncatechars:21 }}</a>
-                                    <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
-                                </div>
-                                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold"
-                                   href="{% url 'article' article.slug %}">{{ article.name | truncatewords:6}}</a>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-                <!-- Popular News End -->
+                {% include 'news/partials/last_news.html' %}
 
                 <!-- Newsletter Start -->
                 <div class="mb-3">
@@ -360,30 +337,11 @@
                 <!-- Newsletter End -->
 
                 <!-- Tags Start -->
-                <div class="mb-3">
-                    <div class="section-title mb-0">
-                        <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
-                    </div>
-                    <div class="bg-white border border-top-0 p-3">
-                        <div class="d-flex flex-wrap m-n1">
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Politics</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Business</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Corporate</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Business</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Health</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Education</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Science</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Business</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Foods</a>
-                            <a href="" class="btn btn-sm btn-outline-secondary m-1">Travel</a>
-                        </div>
-                    </div>
-                </div>
+                {% include 'news/partials/tags.html' %}
                 <!-- Tags End -->
             </div>
         </div>
     </div>
 </div>
 <!-- News With Sidebar End -->
-
 {% endblock content %}

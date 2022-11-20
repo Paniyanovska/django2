@@ -5,6 +5,10 @@ from .actions import count_words, get_fresh_news
 from .models import Article, Author, Category, Newsletter, Comment, Tag
 
 
+class CommentArticleInline(admin.TabularInline):
+    model = Comment
+
+
 class ArticleAdmin(SummernoteModelAdmin):
     summernote_fields = ('content', 'short_description')
     list_display = ('image_code', 'name', 'pub_date',
@@ -12,6 +16,7 @@ class ArticleAdmin(SummernoteModelAdmin):
     list_filter = ('author', 'pub_date', 'categories')
     search_fields = ('name', 'author')
     actions = (count_words, )
+    inlines = (CommentArticleInline, )
 
     def image_code(self, object):
         return format_html(

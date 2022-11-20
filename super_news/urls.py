@@ -24,14 +24,14 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', views.index_hendler, name='homepage'),
     path('blog/', views.blog_hendler, name='blog'),
-    path('<cat_slug>/', views.category_hendler, name='category'),
+    path('<cat_slug>', views.blog_hendler, name='category'),
     path('post/<post_slug>', views.page_hendler, name='article'),
     path('contact/', views.contact_hendler, name='contact'),
 
     path('robots.txt', views.robots_hendler),
 
     path('summernote/', include('django_summernote.urls')),
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

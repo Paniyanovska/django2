@@ -1,0 +1,24 @@
+<!-- Popular News Start -->
+<div class="mb-3">
+    <div class="section-title mb-0">
+        <h4 class="m-0 text-uppercase font-weight-bold">Popular News</h4>
+    </div>
+    <div class="bg-white border border-top-0 p-3">
+        {% for article in last_news %}
+        <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+            <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
+            <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                <div class="mb-2">
+                    <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
+                       href="{% url 'category' article.categories.all.0.slug %}">
+                        {{ article.categories.all.0 | truncatechars:21 }}</a>
+                    <a class="text-body" href=""><small>{{ article.pub_date | truncatechars:12 }}</small></a>
+                </div>
+                <a class="h6 m-0 text-secondary text-uppercase font-weight-bold"
+                   href="{% url 'article' article.slug %}">{{ article.name | truncatewords:6}}</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- Popular News End -->
