@@ -2,46 +2,13 @@
 {% load static %}
 
 {% block content %}
-<!-- Navbar Start -->
-<div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
-            <a href="{% url 'homepage' %}" class="navbar-brand d-block d-lg-none">
-                <h1 class="m-0 display-4 text-uppercase text-primary">Biz<span class="text-white font-weight-normal"
-                >News</span></h1>
-            </a>
-            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
-                <div class="navbar-nav mr-auto py-0">
-                    <a href="{% url 'homepage' %}" class="nav-item nav-link active">Home</a>
-                    <div class="nav-item dropdown">
-                        <a href="{% url 'blog' %}" class="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
-                        <div class="dropdown-menu rounded-0 m-0">
-                            {% for cat in menu_categories %}
-                            <a href="{% url 'category' cat.slug %}" class="dropdown-item">{{ cat.name }}</a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
-                </div>
-                <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
-                    <input type="text" class="form-control border-0" placeholder="Keyword">
-                    <div class="input-group-append">
-                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
-                                class="fa fa-search"></i></button>
-                    </div>
-                </div>
-            </div>
-        </nav>
-    </div>
-<!-- Navbar End -->
+{% include 'news/partials/navbar.html' %}
 <!-- Main News Slider Start -->
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-7 px-0">
             <div class="owl-carousel main-carousel position-relative">
-                    {% for article in first_slider_articles %}
+                    {% for article in articles|slice:":3" %}
                     <div class="position-relative overflow-hidden" style="height: 500px;">
                         <img class="img-fluid h-100" src="{{ article.main_image.url }}"
                         style="object-fit: cover;">
@@ -60,7 +27,7 @@
         </div>
         <div class="col-lg-5 px-0">
             <div class="row mx-0">
-                {% for article in side_slider_articles %}
+                {% for article in articles|slice:"3:7" %}
                 <div class="col-md-6 px-0">
                     <div class="position-relative overflow-hidden" style="height: 250px;">
                         <img class="img-fluid w-100 h-100" src="{{ article.main_image.url }}" style="object-fit: cover;">
@@ -109,7 +76,7 @@
                             <a class="text-secondary font-weight-medium text-decoration-none" href="">View All</a>
                         </div>
                     </div>
-                    {% for article in first_2_article %}
+                    {% for article in articles|slice:"7:9" %}
                     <div class="col-lg-6">
                         <div class="position-relative mb-3">
                             <img class="img-fluid w-100" src="{{ article.main_image.url }}" style="object-fit: cover;">
@@ -137,7 +104,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% for article in last_2_article %}
+                    {% for article in articles|slice:"9:11" %}
                     <div class="col-lg-6">
                         <div class="position-relative mb-3">
                             <img class="img-fluid w-100" src="{{ article.main_image.url }}" style="object-fit: cover;">
@@ -166,7 +133,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% for article in first_2_small_article %}
+                    {% for article in articles|slice:"11:13" %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
                             <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
@@ -183,7 +150,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% for article in last_2_small_article %}
+                    {% for article in articles|slice:"13:15" %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
                             <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
@@ -200,7 +167,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% for article in one_big_article %}
+                    {% for article in articles|slice:"15:16" %}
                     <div class="col-lg-12">
                         <div class="row news-lg mx-0 mb-3">
                             <div class="col-md-6 h-100 px-0">
@@ -234,7 +201,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% for article in lower_first_2_article %}
+                    {% for article in articles|slice:"16:18" %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
                             <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">
@@ -251,7 +218,7 @@
                         </div>
                     </div>
                     {% endfor %}
-                    {% for article in lower_last_2_article %}
+                    {% for article in articles|slice:"18:20" %}
                     <div class="col-lg-6">
                         <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
                             <img class="img-fluid" src="{{ article.main_image_crop.url }}" alt="">

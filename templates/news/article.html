@@ -78,10 +78,7 @@
                                     href="{% url 'category' article.categories.all.0.slug %}">{{ article.categories.all.0 }}</a>
                                 <a class="text-body" href="">{{ article.pub_date }}</a>
                             </div>
-                            <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">{{ article.name }}</h1>
-                            {{ article.content | safe }}
-                        </div>
-                        <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+                            <div class="d-flex justify-content-between bg-white border border-top-0 p-4">
                             <div class="d-flex align-items-center">
                                 <img class="rounded-circle mr-2"
                                      src="{{ article.author.avatar.url }}" width="25" height="25" alt="">
@@ -89,14 +86,17 @@
                             </div>
                             <div class="d-flex align-items-center">
                                 <span class="ml-3"><i class="far fa-eye mr-2"></i>12345</span>
-                                <span class="ml-3"><i class="far fa-comment mr-2"></i>
-                                    {{ article.comments.all.count }}</span>
+                                <a href="#comments" class="ml-3"><i class="far fa-comment mr-2"></i>
+                                    {{ article.comments.all.count }}</a>
                             </div>
+                        </div>
+                            <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">{{ article.name }}</h1>
+                            {{ article.content | safe }}
                         </div>
                     </div>
                 <!-- News Detail End -->
                 <!-- Comment List Start -->
-                <div class="mb-3">
+                <div class="mb-3" id="comments">
                         <div class="section-title mb-0">
                             <h4 class="m-0 text-uppercase font-weight-bold">{{ article.comments.all.count }} Comments</h4>
                         </div>
@@ -121,33 +121,59 @@
                             <h4 class="m-0 text-uppercase font-weight-bold">Leave a comment</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-4">
-                            <form>
+                            {% if form.non_field_errors %}
+                                {% for error in form.non_field_errors %}
+                                    <p style="color: red;">{{ error }}</p>
+                                {% endfor %}
+                            {% endif %}
+                            <form action="" method="post">
+                                {% csrf_token %}
                                 <div class="form-row">
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="name">Name *</label>
-                                            <input type="text" class="form-control" id="name">
+                                            {{ form.name.errors }}
+                                            <input type="text" class="form-control" name="name" id="name" required
+                                                   {% if form.name.value %}
+                                                   value="{{ form.name.value }}"
+                                                   {% endif %}
+                                            >
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
                                             <label for="email">Email *</label>
-                                            <input type="email" class="form-control" id="email">
+                                            {{ form.email.errors }}
+                                            <input type="email" class="form-control" name="email" id="email" required
+                                            {% if form.email.value %}
+                                            value="{{ form.email.value }}"
+                                            {% endif %}
+                                            >
                                         </div>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="website">Website</label>
-                                    <input type="url" class="form-control" id="website">
+                                    {{ form.website.errors }}
+                                    <input type="url" class="form-control" name="website" id="website"
+                                           {% if form.website.value %}
+                                           value="{{ form.website.value }}"
+                                           {% endif %}>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="message">Message *</label>
-                                    <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                    <label for="comment">Comment *</label>
+                                    {{ form.comment.errors }}
+                                    <textarea
+                                            id="comment" cols="30"
+                                            rows="5" name="comment"
+                                            class="form-control">{% if form.comment.value %}{{ form.comment.value }}{% endif %}
+                                    </textarea>
                                 </div>
                                 <div class="form-group mb-0">
-                                    <input type="submit" value="Leave a comment"
-                                        class="btn btn-primary font-weight-semi-bold py-2 px-3">
+                                    <button type="submit"
+                                            class="btn btn-primary font-weight-semi-bold py-2 px-3">Leave a comment
+                                    </button>
                                 </div>
                             </form>
                         </div>

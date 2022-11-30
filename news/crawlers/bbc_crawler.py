@@ -57,7 +57,6 @@ def crawl_one(url):
         print(e)
 
     if im.mode == "JPEG":
-        print('Тип изображения проверили')
         pass
     elif im.mode in ["RGBA", "P"]:
         im = im.convert("RGB")

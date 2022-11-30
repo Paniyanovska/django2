@@ -1,7 +1,5 @@
 from django.db import models
 from string import punctuation
-from image_cropping import ImageRatioField
-from image_cropping.utils import get_backend
 
 
 class Category(models.Model):
@@ -62,6 +60,8 @@ class Comment(models.Model):
     comment = models.TextField()
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
     pub_date = models.DateTimeField(auto_now_add=True)
+
+    objects = models.Manager()
 
     def __str__(self):
         return self.comment[:20]
