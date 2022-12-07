@@ -22,13 +22,12 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('', views.index_hendler, name='homepage'),
-    path('blog/', views.blog_hendler, name='blog'),
-    path('<cat_slug>', views.blog_hendler, name='category'),
-    path('post/<post_slug>', views.page_hendler, name='article'),
-    path('contact/', views.contact_hendler, name='contact'),
-
-    path('robots.txt', views.robots_hendler),
+    path('robots.txt', views.RobotsView.as_view()),
+    path('', views.IndexView.as_view(), name='homepage'),
+    path('blog', views.BlogListView.as_view(), name='blog'),
+    path('<cat_slug>', views.CategoryListView.as_view(), name='category'),
+    path('post/<post_slug>', views.PageDetailView.as_view(), name='article'),
+    path('contact/', views.ContactView.as_view(), name='contact'),
 
     path('summernote/', include('django_summernote.urls')),
     path('admin/', admin.site.urls, name='admin'),

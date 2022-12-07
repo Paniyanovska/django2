@@ -18,7 +18,7 @@
         </div>
         <div class="col-lg-3 col-md-6 mb-5">
             <h5 class="mb-4 text-white text-uppercase font-weight-bold">Popular News</h5>
-            {% for article in footer_articles %}
+            {% for article in last_news|slice:"0:3" %}
             <div class="mb-3">
                 <div class="mb-2">
                     <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2"
@@ -33,7 +33,7 @@
         <div class="col-lg-3 col-md-6 mb-5">
             <h5 class="mb-4 text-white text-uppercase font-weight-bold">Categories</h5>
             <div class="m-n1">
-                {% for cat in footer_category %}
+                {% for cat in top_category %}
                 <a href="{% url 'category' cat.slug %}" class="btn btn-sm btn-secondary m-1">{{cat.name}}</a>
                 {% endfor %}
             </div>

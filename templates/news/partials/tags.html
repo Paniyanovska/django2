@@ -6,7 +6,7 @@
     </div>
     <div class="bg-white border border-top-0 p-3">
         <div class="d-flex flex-wrap m-n1">
-            {% for tag in tags %}
+            {% for tag in top_category|slice:"0:10" %}
             <a href="{% url 'category' tag.slug %}"
                class="btn btn-sm btn-outline-secondary m-1">{{ tag.name }}</a>
             {% endfor %}

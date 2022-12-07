@@ -1,39 +1,7 @@
 {% extends 'news/base.html' %}
 
 {% block content %}
-<!-- Navbar Start -->
-<div class="container-fluid p-0">
-    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
-        <a href="{% url 'homepage' %}" class="navbar-brand d-block d-lg-none">
-            <h1 class="m-0 display-4 text-uppercase text-primary">Biz<span class="text-white font-weight-normal">News</span></h1>
-        </a>
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
-            <div class="navbar-nav mr-auto py-0">
-                <a href="{% url 'homepage' %}" class="nav-item nav-link">Home</a>
-                <div class="nav-item dropdown">
-                    <a href="{% url 'blog' %}" class="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
-                    <div class="dropdown-menu rounded-0 m-0">
-                        {% for cat in menu_categories %}
-                        <a href="{% url 'category' cat.slug %}" class="dropdown-item">{{ cat.name }}</a>
-                        {% endfor %}
-                    </div>
-                </div>
-                <a href="{% url 'contact' %}" class="nav-item nav-link">Contact</a>
-            </div>
-            <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
-                    <input type="text" class="form-control border-0" placeholder="Keyword">
-                    <div class="input-group-append">
-                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
-                                class="fa fa-search"></i></button>
-                    </div>
-                </div>
-        </div>
-    </nav>
-</div>
-<!-- Navbar End -->
+{% include 'news/partials/navbar.html' %}
 <!-- Breaking News Start -->
 <div class="container-fluid mt-5 mb-3 pt-3">
     <div class="container">
@@ -97,11 +65,12 @@
                 <!-- News Detail End -->
                 <!-- Comment List Start -->
                 <div class="mb-3" id="comments">
+                    {% if comments %}
                         <div class="section-title mb-0">
-                            <h4 class="m-0 text-uppercase font-weight-bold">{{ article.comments.all.count }} Comments</h4>
+                            <h4 class="m-0 text-uppercase font-weight-bold">{{ comments.count }} Comments</h4>
                         </div>
                         <div class="bg-white border border-top-0 p-4">
-                            {% for comment in article.comments.all %}
+                            {% for comment in comments %}
                             <div class="media mb-4">
 
                                 <div class="media-body">
@@ -113,7 +82,8 @@
                             </div>
                             {% endfor %}
                         </div>
-                    </div>
+                    {% endif %}
+                </div>
                 <!-- Comment List End -->
                 <!-- Comment Form Start -->
                 <div class="mb-3">

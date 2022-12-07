@@ -21,7 +21,7 @@
                     <a href="{% url 'blog' %}" class="nav-link dropdown-toggle" data-toggle="dropdown">Blog</a>
                     {% endif %}
                     <div class="dropdown-menu rounded-0 m-0">
-                        {% for cat in menu_categories %}
+                        {% for cat in top_category|slice:"0:5" %}
                         <a href="{% url 'category' cat.slug %}" class="dropdown-item">{{ cat.name }}</a>
                         {% endfor %}
                     </div>

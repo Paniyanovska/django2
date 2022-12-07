@@ -68,10 +68,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-                "news.context_processor.menu_categories",
-                "news.context_processor.footer_category",
-                "news.context_processor.popular_news",
-                "news.context_processor.tags",
+                "news.context_processor.top_category",
                 "news.context_processor.last_news"
             ],
         },

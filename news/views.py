@@ -1,85 +1,91 @@
-from django.shortcuts import render
-from django.contrib import messages
-from django.core.paginator import Paginator
 from django.core.exceptions import ObjectDoesNotExist
 from .models import Article, Category, Comment
 from .forms import CommentForm
+from django.urls import reverse
+from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic.detail import SingleObjectMixin
+from django.views.generic.edit import FormMixin
 
 
-def index_hendler(request):
-    articles = Article.objects.all().order_by(
+class IndexView(TemplateView):
+    template_name = 'news/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['articles'] = Article.objects.all().order_by(
         '-pub_date')[:20].prefetch_related('categories')
-
-    context = {
-        'articles': articles,
-    }
-    return render(request, 'news/index.html', context)
+        return context
 
 
-def blog_hendler(request, **kwargs):
-    cat_slug = kwargs.get('cat_slug')
-    curent_page = int(request.GET.get('page', 1))
-    articles_on_page = 8
+class BlogListView(ListView):
+    template_name = 'news/blog.html'
+    model = Article
+    ordering = '-pub_date'
+    paginate_by = 8
 
-    if cat_slug:
-        category = Category.objects.get(slug=cat_slug)
-        last_articles = Article.objects.filter(
-            categories__slug=cat_slug).order_by(
-            '-pub_date').prefetch_related('categories')
-    else:
-        last_articles = Article.objects.all().order_by(
-            '-pub_date').prefetch_related('categories')
-        category = None
-
-    paginator = Paginator(last_articles, articles_on_page)
-    page_obj = paginator.get_page(curent_page)
-
-    context = {
-        'category': category,
-        'page_obj': page_obj,
-        'paginator': paginator
-    }
-    return render(request, 'news/blog.html', context)
+    def get_queryset(self):
+        return super().get_queryset().prefetch_related('categories')
 
 
-def page_hendler(request, post_slug):
-    main_article = Article.objects.get(slug=post_slug)
+class CategoryListView(ListView, SingleObjectMixin):
+    template_name = 'news/blog.html'
+    model = Article
+    ordering = '-pub_date'
+    paginate_by = 8
+    slug_url_kwarg = 'cat_slug'
 
-    try:
-        prev_article = Article.objects.get(id=main_article.id-1)
-    except ObjectDoesNotExist:
-        prev_article = None
-    try:
-        next_article = Article.objects.get(id=main_article.id+1)
-    except ObjectDoesNotExist:
-        next_article = None
-    context = {
-        'article': main_article,
-        'prev_article': prev_article,
-        'next_article': next_article
-    }
-    if request.method == 'POST':
-        form = CommentForm(request.POST)
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object(queryset=Category.objects.all())
+        return super().get(request, *args, **kwargs)
+
+    def get_queryset(self):
+        self.queryset = self.object.article_set.all().prefetch_related('categories')
+        return super().get_queryset()
+
+
+class PageDetailView(FormMixin, DetailView):
+    template_name = 'news/article.html'
+    model = Article
+    slug_url_kwarg = 'post_slug'
+    form_class = CommentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            prev_article = Article.objects.get(id=self.object.id - 1)
+        except ObjectDoesNotExist:
+            prev_article = None
+        try:
+            next_article = Article.objects.get(id=self.object.id + 1)
+        except ObjectDoesNotExist:
+            next_article = None
+        context['prev_article'] = prev_article
+        context['next_article'] = next_article
+        context['comments'] = self.object.comments.filter(is_moderated=True)
+        return context
+
+    def get_success_url(self):
+        return reverse('blog')
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        form = self.get_form()
         if form.is_valid():
-            data = form.cleaned_data
-            data['article'] = main_article
-            Comment.objects.create(**data)
-            form = CommentForm()
+            return self.form_valid(form)
         else:
-            messages.add_message(request, messages.INFO, 'Error in FORM fields')
-    else:
-        form = CommentForm()
+            return self.form_invalid(form)
 
-    context['form'] = form
-
-    return render(request, 'news/article.html', context)
-
-
-def contact_hendler(request):
-    context = {}
-    return render(request, 'news/contact.html', context)
+    def form_valid(self, form):
+        data = form.cleaned_data
+        data['article'] = self.object
+        Comment.objects.create(**data)
+        return super().form_valid(form)
 
 
-def robots_hendler(request):
-    context = {}
-    return render(request, 'news/robots.txt', context, content_type='text/plain')
+class ContactView(TemplateView):
+    template_name = 'news/contact.html'
+
+
+class RobotsView(TemplateView):
+    template_name = 'news/robots.txt'
+    content_type = 'text/plain'
