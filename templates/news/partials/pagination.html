@@ -1,3 +1,5 @@
+{% if is_paginated == False %}
+{% else %}
 <div class="center">
   <div class="pagination">
     {% if page_obj.has_previous %}
@@ -15,3 +17,4 @@
     {% endif %}
   </div>
 </div>
+{% endif %}
