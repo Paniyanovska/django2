@@ -5,23 +5,22 @@ from concurrent.futures import ThreadPoolExecutor
 from news.models import Article, Author, Category
 
 
-if len(Author.objects.filter(name='BBC News')) == 0:
-    name = 'BBC News'
-    avatar = 'avatars/bbc-news.jpg'
-    bio = 'Technology News from BBC'
-
-    author = {
-        'name': name,
-        'avatar': avatar,
-        'bio': bio
-    }
-    author, created = Author.objects.get_or_create(**author)
-
-else:
-    author = Author.objects.filter(name='BBC News')[0]
-
-
 def crawl_one(url):
+    if len(Author.objects.filter(name='BBC News')) == 0:
+        name = 'BBC News'
+        avatar = 'avatars/bbc-news.jpg'
+        bio = 'Technology News from BBC'
+
+        author = {
+            'name': name,
+            'avatar': avatar,
+            'bio': bio
+        }
+        author, created = Author.objects.get_or_create(**author)
+
+    else:
+        author = Author.objects.filter(name='BBC News')[0]
+
     with HTMLSession() as session:
         response = session.get(url)
 
