@@ -25,7 +25,7 @@ SECRET_KEY = "django-insecure-k(-@6$67kw#9w(wlldc=3bo+_g(65&08-u6&x5==g013-md*+&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["127.0.0.1", "135.181.0.141"]
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 INTERNAL_IPS = ["127.0.0.1"]
 
@@ -88,7 +88,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -127,3 +126,5 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+from .settings_local import *
